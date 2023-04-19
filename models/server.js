@@ -6,7 +6,7 @@ const cors      = require('cors');
 class Server {
     constructor() {
         this.app = express();
-        this.puerto = process.env.PORT;
+        this.puerto = process.env.PORT || 3000;   // Si la variable no existe le asigna puerto 3000
         this.usuariosPath = '/api/usuarios';     //Config. del Endpoint de usuarios
 
         //Middlewares   Se que es un middleware porque se usa con "use"
