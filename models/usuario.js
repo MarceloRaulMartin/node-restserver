@@ -37,9 +37,10 @@ const UsuarioSchema = Schema({
 
 UsuarioSchema.methods.toJSON = function () {  //Para modificar el JSON recibido debe ser funcion normal
                                               //para poder usar el "this"
-    const {__v, password, ...restodatos} = this.toObject(); //desestructuro toObjet() que retornar una instancia con los datos recibidos
-                                                         //"..." ejecuta el rest de los datos a la variable "restodatos"
-    return restodatos   // retorno todos los datos exepto "__v" y "pasword"
+    const {__v, password, _id, ...restodatos} = this.toObject(); //desestructuro toObjet() que retornar una instancia con los datos recibidos
+                                                              //"..." ejecuta el rest de los datos a la variable "restodatos"
+    restodatos.uid = _id;
+    return restodatos   // retorno todos los datos excepto "__v" y "pasword"
 }
 
 module.exports = model('Usuario', UsuarioSchema)  
