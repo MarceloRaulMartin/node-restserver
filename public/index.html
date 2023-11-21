@@ -4,9 +4,68 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso denegado</title>
+    <title>Google Sign-in</title>
 </head>
 <body>
-    <h1>Acceso Denegado</h1>
+    <h1>Google Sign-in</h1>
+    <hr>
+    <div id="g_id_onload"
+        data-client_id="860976223386-uddrdrmg70q60p132gmel0pmlp83r45t.apps.googleusercontent.com"
+        data-auto_prompt="false"
+        data-callback="handleCredentialResponse">
+        </div>
+        <div class="g_id_signin"
+            data-type="standard"
+            data-size="large"
+            data-theme="outline"
+            data-text="sign_in_with"
+            data-shape="rectangular"
+            data-logo_alignment="left">
+        </div>
+
+        // Boton de fin de login google 
+        <button id="google_signout">
+            Signout
+        </button>
+
+
+    <script src="https://accounts.google.com/gsi/client" async></script>
+
+    <script>
+        function handleCredentialResponse(response) {
+            // Google Token ID_TOKEN
+            //console.log('id_token',response.credential);
+            const body = { id_token: response.credential }; //Credencial que viene de google
+
+            fetch('http://localhost:8080/api/auth/google',{
+                method: 'POST',  // fetch por defecto es para GET debo configurarlo
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(body)  // body serializado como JSON
+            })
+            .then( resp => resp.json() )
+            .then( resp =>  { 
+                console.log(resp )
+                localStorage.setItem('email', resp.usuario.correo)
+            })
+            .cath( console.warn );
+        }
+
+        // Referencia al boton signout
+        const button = document.getElementById('google_signout')  
+        //Agrego un Listener al Boton
+        button.onclick = () => {
+            console.log( google.accounts.id )
+            google.accounts.id.disableAutoSelect()
+            google.accounts.id.revoke( localStorage.getItem('email'), donev=>{
+                localStorage.clear();
+                localStorage.reload();
+            });
+        }
+
+
+      </script>
+
 </body>
 </html>
